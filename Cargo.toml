@@ -24,7 +24,9 @@ byte-strings-proc-macro = "0.1.1"
 cfg-if = "0.1.6"
 
 [features]
-default = []
+default = ["std"]
+
+std = []
 
 nightly = []
 proc-macro-hygiene = ["byte-strings-proc-macro/proc-macro-hygiene"]

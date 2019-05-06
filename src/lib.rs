@@ -11,6 +11,8 @@
     doc = "for more info about this crate."
 )]
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
 ::cfg_if::cfg_if![ if #[cfg(feature = "proc-macro-hygiene")]
 {
     #[doc(hidden)]
@@ -18,8 +20,10 @@
     use ::byte_strings_proc_macro::{
         as_bytes as as_bytes_proc_macro,
         concat_bytes as concat_bytes_proc_macro,
-        c_str as c_str_proc_macro,
     };
+    #[doc(hidden)]
+    #[cfg(feature = "std")]
+    pub use ::byte_strings_proc_macro::c_str as c_str_proc_macro;
 
 
     /// Concatenates byte string literals into a single byte string literal
@@ -134,6 +138,7 @@
     /// `c_str!("Hello, ", "World!")`
     /// expands to
     /// `b"Hello, World!\0"`
+    #[cfg(feature = "std")]
     #[macro_export]
     macro_rules! c_str {(
         $($literal:expr),+ $(,)?
@@ -150,6 +155,9 @@ else
         const_as_bytes as const_as_bytes_proc_macro,
         const_c_str as const_c_str_proc_macro,
     };
+    #[doc(hidden)]
+    #[cfg(feature = "std")]
+    pub use ::byte_strings_proc_macro::const_c_str as const_c_str_proc_macro;
 
 
     /// Help rust disambiguate between an item and a statement
@@ -337,6 +345,7 @@ else
     /// Undefined Behaviour, a size-check guard using arrays was added.
     ///
     /// [C string]: ::std::ffi::CStr
+    #[cfg(feature = "std")]
     #[macro_export]
     macro_rules! c_str {(
         $($literal:expr),+ $(,)?
